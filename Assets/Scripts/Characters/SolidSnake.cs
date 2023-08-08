@@ -46,6 +46,13 @@ public class SolidSnake : GameCharacter
         SetAnimatorStates();
 
     }
+    void OnTriggerEnter2D(Collider2D Tirget)
+    {
+        if (Tirget.gameObject.tag == "ZombieDamage")
+        {
+            TakeDamage(25);
+        }
+    }
 
     void CheckHealth()
     {

@@ -8,19 +8,21 @@ public class ZombieAI : MonoBehaviour
     public ushort DetectionDistance = 10;
     public List<GameObject> Targets = new List<GameObject>();
 
-
-    private GameObject CurrentDetectedTarget;
-
     void Start()
     {
 
     }
     void Update()
     {
-        ChaseTarget(LookForTagets());
+        if (charachter.IsAlive)
+            ChaseTarget(LookForTagets());
     }
+
     void ChaseTarget(GameObject target)
     {
+        if (!charachter.IsAlive)
+            return;
+
         if (target == null)
         {
             charachter.IsMoveing = false;
@@ -36,7 +38,10 @@ public class ZombieAI : MonoBehaviour
     }
     void MoveTo(Vector2 point)
     {
-        if(transform.position.x - point.x > 0)
+        if (!charachter.IsAlive)
+            return;
+
+        if (transform.position.x - point.x > 0)
         {
             charachter.Move(TowDDirections.Left);
         }

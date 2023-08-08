@@ -6,27 +6,38 @@ public class Zombie : GameCharacter
 {
     private Rigidbody2D rigid;
     private Animator animator;
-    private BoxCollider2D colider;
+    public GameObject Damage;
+
 
     public float Speed = 1;
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        colider = GetComponent<BoxCollider2D>();
     }
     void Update()
     {
         if (Health <= 0)
-            animator.SetBool("Alive",false);
+        {
+            Die();
+        }
 
         if (!IsMoveing)
             animator.SetInteger("Speed",0);
 
     }
+    void OnTriggerEnter2D(Collider2D Tirget)
+    {
+        if (Tirget.gameObject.tag == "Bullet")
+        {
+            TakeDamage(25);
+        }
+    }
 
     public override void Move(TowDDirections Direction)
     {
+        if (!IsAlive)
+            return;
         if (!HoldingGaurd)
         {
             float RealSpeed = Speed * Time.deltaTime * 1000;
@@ -57,6 +68,9 @@ public class Zombie : GameCharacter
     }
     public override void Flip()
     {
+        if (!IsAlive)
+            return;
+
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
         if (transform.localScale.x < 0)
@@ -70,6 +84,9 @@ public class Zombie : GameCharacter
     }
     public override void TakeDamage(int damage)
     {
+        if (!IsAlive)
+            return;
+
         Health -= damage;
 
         float DamageThrowForce = Speed * Time.deltaTime * 1000;
@@ -95,17 +112,17 @@ public class Zombie : GameCharacter
     {
         Health = 0;
         animator.SetBool("Alive",false);
-        colider.enabled = false;
-        rigid.gravityScale = 0;
-        
+        Destroy(gameObject,5);
     }
     public override void SwitchWeapone()
     {
         
     }
 
+
     public void Hit()
     {
-
+        GameObject da = Instantiate(Damage);
+        Destroy(da,0.3f);
     }
 }
