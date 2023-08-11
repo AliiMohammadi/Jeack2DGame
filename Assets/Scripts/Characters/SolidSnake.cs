@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// دستوران کاراکتر سرباز
+/// </summary>
 public class SolidSnake : GameCharacter
 {
     private Rigidbody2D rigid;
@@ -114,6 +117,15 @@ public class SolidSnake : GameCharacter
     {
         Health = 0;
         animator.SetTrigger("Death");
+        try
+        {
+            OnDeath();
+
+        }
+        catch (System.Exception)
+        {
+
+        }
     }
     public override void Move(TowDDirections Direction)
     {

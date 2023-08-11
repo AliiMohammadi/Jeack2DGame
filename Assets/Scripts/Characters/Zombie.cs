@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// دستورات کاراکتر زامبی
+/// </summary>
 public class Zombie : GameCharacter
 {
     private Rigidbody2D rigid;
     private Animator animator;
-    public GameObject Damage;
-
 
     public float Speed = 1;
+
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
+
     void Update()
     {
         if (Health <= 0)
@@ -30,7 +33,11 @@ public class Zombie : GameCharacter
     {
         if (Tirget.gameObject.tag == "Bullet")
         {
+            if (!IsAlive)
+                return;
+
             TakeDamage(25);
+            Destroy(Tirget.gameObject);
         }
     }
 
@@ -38,33 +45,36 @@ public class Zombie : GameCharacter
     {
         if (!IsAlive)
             return;
-        if (!HoldingGaurd)
-        {
-            float RealSpeed = Speed * Time.deltaTime * 1000;
-            animator.SetInteger("Speed", (int)RealSpeed);
-            switch (Direction)
-            {
-                case TowDDirections.Left:
-                    if (BodySide == TowDDirections.Right)
-                    {
-                        Flip();
-                    }
-                    //transform.Translate(new Vector2(-RealSpeed, 0));
-                    rigid.AddForce(new Vector2(-RealSpeed, 0));
-                    break;
-                case TowDDirections.Right:
-                    if (BodySide == TowDDirections.Left)
-                    {
-                        Flip();
-                    }
-                    //transform.Translate(new Vector2(RealSpeed, 0));
-                    rigid.AddForce(new Vector2(RealSpeed, 0));
-                    break;
+        if (HoldingGaurd)
+            return;
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attaking"))
+            return;
 
-                default:
-                    break;
-            }
+        float RealSpeed = Speed * Time.deltaTime * 1000;
+        animator.SetInteger("Speed", (int)RealSpeed);
+        switch (Direction)
+        {
+            case TowDDirections.Left:
+                if (BodySide == TowDDirections.Right)
+                {
+                    Flip();
+                }
+                //transform.Translate(new Vector2(-RealSpeed, 0));
+                rigid.AddForce(new Vector2(-RealSpeed, 0));
+                break;
+            case TowDDirections.Right:
+                if (BodySide == TowDDirections.Left)
+                {
+                    Flip();
+                }
+                //transform.Translate(new Vector2(RealSpeed, 0));
+                rigid.AddForce(new Vector2(RealSpeed, 0));
+                break;
+
+            default:
+                break;
         }
+
     }
     public override void Flip()
     {
@@ -89,7 +99,9 @@ public class Zombie : GameCharacter
 
         Health -= damage;
 
-        float DamageThrowForce = Speed * Time.deltaTime * 1000;
+        float DamageThrowForce = (Speed * Time.deltaTime * 1000) * 8;
+
+        FreezAframe();
 
         switch (BodySide)
         {
@@ -106,23 +118,30 @@ public class Zombie : GameCharacter
     }
     public override void Attack()
     {
+        FreezAframe();
         animator.SetTrigger("Attack");
     }
     public override void Die()
     {
+        FreezAframe();
         Health = 0;
         animator.SetBool("Alive",false);
-        Destroy(gameObject,5);
+
+        try
+        {
+            OnDeath();
+        }
+        catch (System.Exception)
+        {
+        }
     }
     public override void SwitchWeapone()
     {
         
     }
 
-
-    public void Hit()
+    void FreezAframe()
     {
-        GameObject da = Instantiate(Damage);
-        Destroy(da,0.3f);
+        rigid.velocity = Vector2.zero;
     }
 }

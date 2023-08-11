@@ -58,8 +58,11 @@
      <Compile Include="Assets\Scripts\Characters\SolidSnake.cs" />
      <Compile Include="Assets\Scripts\Characters\Zombie.cs" />
      <Compile Include="Assets\Scripts\Characters\ZombieAI.cs" />
-     <Compile Include="Assets\Scripts\Helloworld.cs" />
+     <Compile Include="Assets\Scripts\Controllers\GameManager.cs" />
+     <Compile Include="Assets\Scripts\Enviorments\Door.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Menu\BasicMenu.cs" />
      <Compile Include="Assets\Scripts\Weapons\Bullet.cs" />
+     <None Include="Assets\Matrealse\BLUR.shader" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>D:/Developing/GameProjects/UnityTutorial/Projects/Made Before/Jeack2DGame/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>

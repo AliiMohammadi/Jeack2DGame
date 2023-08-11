@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 
-
+/// <summary>
+/// برنامه ای برای کنترل یک کاراکتر
+/// </summary>
 public class GameCharacterControler : MonoBehaviour 
 {
 	private GameCharacter Character;
